@@ -1,8 +1,8 @@
---1
+--1 주어진 정수 n까지의 제곱의 합을 계산하는 함수
 sumofsquares :: Int -> Int
 sumofsquares n = sum [x^2 | x <- [1..n]]
 
---2
+--2 문자열 리스트에서 각 문자열의 길이를 계산하는 함수
 lengths :: [String] -> [Int]
 lengths strs = [length st| st <- strs]
 
@@ -58,3 +58,6 @@ mymap f xs = [f x | x <- xs]
 --리스트 내포 [f x | x -> xs]를 사용하여 xs의 각 요소 x에 대해 f x를 계산하고 그 결과를 새로운 리스트에 포함시킴.
 --e.g. f=(+1)이고 xs=(1,2,3)이면 f x는 각 2,3,4가 되고, 최종 결과는 [2,3,4]가 됨.
 
+--11 자연수의 모든 쌍을 안티대각선 순서 (antidiagonal order)로 나열 (보류)
+
+--12 RPG 전리품 문제 (보류)
