@@ -1,34 +1,36 @@
-# 문제는 3x3 행렬 A와 3x1 벡터 b가 주어졌을 때, 이를 이용한 선형 시스템 Ax = b를 
-# 가우스 소거법(Gaussian elimination)을 사용하여 해결하기
-
+#가우스 소거법을 사용하여 선형 시스템 Ax=b를 풀기
+#이해 못함. 나중에 다시 풀기
 import numpy as np
 
-#Define the Matrix A and vector b
+def custom_gaussian_elimination(A, b):
+    # 행렬 A와 벡터 b를 결합하여 확장 행렬 생성
+    Ab = np.column_stack((A, b))
 
-A=np.array([[3,1,1],[2,4,1],[2,1,2]])
+    # 행의 수 구하기
+    num_rows = len(Ab)
 
-b=np.array([2,2,1])
+    # 전방 소거 과정
+    for i in range(num_rows):
+        # i번째 열에서 i번째 행 이하를 포함하는 부분에서 절대값이 최대인 행을 찾음
+        max_row_index = np.argmax(np.abs(Ab[i:, i])) + i
+        # 최대 행과 i번째 행을 교환
+        Ab[[i, max_row_index]] = Ab[[max_row_index, i]]
+        # 피봇 행을 피봇 값으로 나누어 피봇을 1로 만듦
+        Ab[i] /= Ab[i, i]
+        
+        # i번째 행을 사용하여 다른 모든 행의 i번째 열을 0으로 만듦
+        for j in range(num_rows):
+            if i != j:
+                factor = Ab[j, i] / Ab[i, i]
+                Ab[j] -= factor * Ab[i]
 
-AA=np.column_stack((A,b))
+    # 마지막 열에서 해 추출
+    return Ab[:, -1]
 
-#가우스 소거법을 통한 행 연산
-#첫 번째 행을 기준으로 두 번째와 세 번째 행을 조정.
+# 주어진 행렬 A와 벡터 b
+A = np.array([[3, 1, 1], [2, 4, 1], [2, 1, 2]])
+b = np.array([2, 2, 1])
 
-factor = AA[1, 0] / AA[0, 0]
-AA[1, :] -= factor * AA[0, :]
-factor = AA[2, 0] / AA[0, 0]
-AA[2, :] -= factor * AA[0, :]
-
-# 두 번째 행을 기준으로 세 번째 행을 조정
-factor = AA[2, 1] / AA[1, 1]
-AA[2, :] -= factor * AA[1, :]
-
-print("Reduced Matrix:\n", AA)
-
-# 역대입을 통한 해 구하기
-x = np.zeros(3)
-x[2] = AA[2, 3] / AA[2, 2]
-x[1] = (AA[1, 3] - AA[1, 2] * x[2]) / AA[1, 1]
-x[0] = (AA[0, 3] - AA[0, 2] * x[2] - AA[0, 1] * x[1]) / AA[0, 0]
-
-print("Solution:", x)
+# 가우스 소거법 함수를 호출하여 해 구하기
+solution = custom_gaussian_elimination(A, b)
+print("Solution:", solution)
